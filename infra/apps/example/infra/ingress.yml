@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  namespace: {{environment}}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  rules:
+  - host: example.{{environment}}.internal
+    http:
+      paths:
+      - backend:
+          service:
+            name: example-service
+            port:
+              name: http-web-svc
+        path: /
+        pathType: Prefix

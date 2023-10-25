@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment
+  namespace: {{environment}}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-app
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: example-app
+        tier: web
+    spec:
+      containers:
+        - name: example-container
+          image: docker.io/{{imagename}}
+          imagePullPolicy: Never
+          ports:
+            - name: web-server
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 192Mi
+            limits:
+              memory: 256Mi
+          envFrom:
+            - configMapRef:
+                name: example-configmap

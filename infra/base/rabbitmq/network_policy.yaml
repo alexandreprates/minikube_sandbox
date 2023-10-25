@@ -1,0 +1,22 @@
+# rabbitmq-service.default.svc.cluster.local
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-rabbitmq-access
+  namespace: default
+spec:
+  policyTypes:
+  - Ingress
+  podSelector:
+    matchLabels:
+      app: rabbitmq
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: {{environment}}
+    ports:
+    - protocol: TCP
+      port: 5672  # Porta padrão do RabbitMQ
+    - protocol: TCP
+      port: 15672 # Porta da interface web

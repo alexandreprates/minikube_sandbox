@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-configmap
+  namespace: {{environment}}
+data:
+  ROOT_LOG_LEVEL: "INFO"
+  PROJECT_LOG_LEVEL: "INFO"
+  DJANGO_LOG_LEVEL: "INFO"
+  DJANGO_DB_BACKENDS_LOG_LEVEL: "INFO"
